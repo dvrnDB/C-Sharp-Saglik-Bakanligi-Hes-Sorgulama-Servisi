@@ -1,0 +1,21 @@
+public class HesCodeRequestModel
+{
+    public string hes_code { get; set; }
+}
+    
+ public class HESResponseModel    {
+        public bool SonucBasarili { get; set; }
+        public string DonusMesaji { get; set; }
+        public DateTime expiration_date { get; set; }
+
+        public string current_health_status { get; set; }
+
+        public string masked_identity_number { get; set; }
+
+    }
+    
+public class ListHesMapModel
+{
+    public Dictionary<string, HESResponseModel> success_map { get; set; }
+    public Dictionary<string, string> unsuccess_map { get; set; }
+}
