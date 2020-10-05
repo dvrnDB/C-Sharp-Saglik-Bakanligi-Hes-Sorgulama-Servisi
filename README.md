@@ -1,4 +1,4 @@
-# C# Saglik-Bakanlıgı-Hes-Sorgulama-Servisi
+# C# Saglik-Bakanlıgı-Hes Kodu-Sorgulama-Servisi
 c# Sağlık bakanlığı hes sorgulama servisi 
 
 Not : Api yi kullanabilmek için Edevlet yetkilileri ile iletişime geçip resmi yazı  ile "Kurumunuz için"  api kullanıcı adı ve şifre almalısınız !!!
