@@ -1,0 +1,56 @@
+public HESResponseModel CheckHesCode(string hescode)
+            {
+                HESResponseModel res = new HESResponseModel();
+                var hes = new HESApi("urladress", "username", "password");
+
+                var checkStr = hes.CheckHesCode("check-hes-code", hescode);
+                try
+                {
+                    if (!string.IsNullOrEmpty(checkStr))
+                    {
+                        res = JsonConvert.DeserializeObject<HESResponseModel>(checkStr);
+                        if (res != null && res.expiration_date < DateTime.Now)
+                        {
+                            res.DonusMesaji = "Kodunuzun geçerlilik tarihi geçmiştir. Yeni bir kod almanız gerekmektedir";
+                            return res;
+                        }
+
+                        res.SonucBasarili = true;
+                        res.DonusMesaji = "Kodunuz geçerli !";
+                    }
+                    else
+                    {
+                        res.DonusMesaji = "Geçersiz kod";
+                        return res;
+                    }
+                }
+                catch (Exception e)
+                {
+                    res.DonusMesaji = e.ToString();
+                }
+
+                return res;
+            }
+            
+            public ListHesMapModel CheckHesCodes(string[] hescodes)
+            {
+                ListHesMapModel res = new ListHesMapModel();
+                //if (hescodes.Length > 500)
+                //res.DonusMesaji = "Bir seferde en fazla 500 kod kontrol edilebilir";
+                var hes = new HESApi("urladress", "username", "password");
+                var checkStr = hes.CheckHesCodes("check-hes-codes", hescodes);
+
+                //var test = "{'success_map':{'F4G61346S2':{'expiration_date':'2021-01-15T10:05:00Z','current_health_status':'RISKLESS','masked_identity_number':'********000'},'P2G88532S2':{'expiration_date':'2020-11-30T22:35:00Z','current_health_status':'RISKLESS','masked_identity_number':'********000'}},'unsuccess_map':{'F4G61346S3':'hescodenotfound','C4G6-1346-S3':'hescodenotfound'}}";
+                var searchStrRes = JsonConvert.DeserializeObject<ListHesMapModel>(checkStr);//test
+                foreach (var success in searchStrRes.success_map)
+                {
+                    if (success.Value.expiration_date < DateTime.Now)
+                    {
+                        success.Value.DonusMesaji = "Kod geçerlilik tarihi geçmiştir.";
+                    }
+                    else
+                        success.Value.SonucBasarili = true;
+                }
+
+                return searchStrRes;
+            }
